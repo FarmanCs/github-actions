@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  deployment-build-docker-img:
+  deployment-build-docker-img-via-github-actions:
     runs-on: ubuntu-latest
 
     steps:
