@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  make-build-of-the-project:
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,7 +27,7 @@ jobs:
       - name: "run build"
         run: npm run build
 
-  unit-tests:
+  unit-test-the-project:
     runs-on: ubuntu-latest
 
     strategy:
