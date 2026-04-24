@@ -1,0 +1,59 @@
+name: Multi Job Deployment Flow in github actions
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  # -------------------------------
+  # JOB 1 — Install Node Packages
+  # -------------------------------
+  install-node-packages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Job 1 Completed Message
+        run: echo "✅ Node packages installed successfully"
+
+  # -------------------------------
+  # JOB 2 — Print Message
+  # -------------------------------
+  notify-next-job:
+    runs-on: ubuntu-latest
+
+    # 👇 This makes Job 2 wait for Job 1
+    needs: install-node-packages
+
+    steps:
+      - name: Print Status Message
+        run: echo "🚀 Job 1 done... moving to Docker build job"
+
+  # -------------------------------
+  # JOB 3 — Docker Build & Setup
+  # -------------------------------
+  docker-build:
+    runs-on: ubuntu-latest
+
+    # 👇 Runs only after Job 2 finishes
+    needs: notify-next-job
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t farmankhan99/devops:latest .
+
+      - name: Docker Build Complete
+        run: echo "🐳 Docker image built successfully"
